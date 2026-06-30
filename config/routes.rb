@@ -6,4 +6,14 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   resources :customers, only: [ :index, :show, :create, :update, :destroy ]
+
+  resources :credit_requests, only: [ :index, :show, :create, :update ] do
+    member do
+      post :submit
+      post :start_review
+      post :approve
+      post :reject
+      post :request_additional_documents
+    end
+  end
 end
