@@ -8,23 +8,27 @@ class CreditRequest < ApplicationRecord
     approved: "approved",
     rejected: "rejected",
     additional_documents_requested: "additional_documents_requested"
-  }
+  }, prefix: true
 
   ACTIVE_STATUSES = %w[draft submitted under_review].freeze
 
-  validates :requested_amount, numericality: { greater_than: 0 }
-  validates :status, presence: :true, default: :draft
+  attribute :status, default: :draft
+  attribute :submitted_at, default: Time.now
+
+  validates :request_amount, presence: true, numericality: { greater_than: 0 }
+  validates :status, presence: true
+  validates :submitted_at, presence: true
 
   validate :only_one_active_request_per_customer, if: :active_status?
 
   private
 
-  def active_status
+  def active_status?
     status.in?(ACTIVE_STATUSES)
   end
 
   def only_one_active_request_per_customer
-    active_db_values = self.class.statuses.slice(*ACTIVE_STATUSES).instance_values
+    active_db_values = self.class.statuses.slice(*ACTIVE_STATUSES).values
 
     conflict_exists = CreditRequest
       .where(customer_id: customer_id, status: active_db_values)

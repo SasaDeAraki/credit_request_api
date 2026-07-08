@@ -10,7 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_30_165436) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_30_174857) do
+  create_table "credit_requests", force: :cascade do |t|
+    t.string "analysis_comment"
+    t.date "analyzed_at"
+    t.datetime "created_at", null: false
+    t.integer "customer_id", null: false
+    t.float "request_amount"
+    t.string "status"
+    t.date "submitted_at"
+    t.datetime "updated_at", null: false
+    t.index ["customer_id"], name: "index_credit_requests_on_customer_id"
+  end
+
   create_table "customers", force: :cascade do |t|
     t.boolean "active"
     t.datetime "created_at", null: false
@@ -19,4 +31,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_30_165436) do
     t.string "name"
     t.datetime "updated_at", null: false
   end
+
+  add_foreign_key "credit_requests", "customers"
 end
