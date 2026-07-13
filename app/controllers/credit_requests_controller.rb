@@ -61,7 +61,7 @@ class CreditRequestsController < ApplicationController
   private
 
   def set_request
-    @request = CreditRequest.find(params[:id])
+    @request = CreditRequest.find(params[:param_request_id])
   end
 
   def request_params

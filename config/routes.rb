@@ -7,13 +7,19 @@ Rails.application.routes.draw do
 
   resources :customers, only: [ :index, :show, :create, :update, :destroy ]
 
-  resources :credit_requests, only: [ :index, :show, :create, :update ] do
-    member do
-      post :submit
-      post :start_review
-      post :approve
-      post :reject
-      post :request_additional_documents
+  resources :credit_requests,
+    only: [ :index, :show, :create, :update ],
+    path: "credit_request",
+    param: :credit_request_id do
+      member do
+        post :submit
+        post :start_review
+        post :approve
+        post :reject
+        post :request_additional_documents
+        get :document, to: "credit_request_documents#index"
+        post :document, to: "credit_request_documents#create"
+        delete :document, to: "credit_request_documents#destroy"
+      end
     end
-  end
 end
